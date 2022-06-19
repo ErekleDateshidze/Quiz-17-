@@ -7,74 +7,51 @@ const search = document.getElementById('search')
 
 getInfo(API_URL)
 
+async function getInfo(url) {
+    const res = await fetch(url)
+    const data = await res.json()
+    showInfo(data.results)
+
+}
 
 
 
+function showInfo(persondata) {
+    main.innerHTML = ''
+    persondata.forEach((info) => {
+        const { picture, name, dob, phone, email } = info
+
+        const infoEl = document.createElement('div')
+        infoEl.classList.add('info')
+
+        infoEl.innerHTML = `
+        <div class="profile">
+            <div class="person image">
+                <img src= "${picture.large} " alt="">
+            </div>
+            <div class="person-info">
+                <h3>${name.first + " " + name.last}</h3>
+                <p class="age" > age : ${dob.age} </p>
+                <p class="phone"> Phone : ${phone} </p>
+                <p class= "mail"> E-Mail : ${email} </p>                     
+            </div>
+        </div>
+        `
+        main.appendChild(infoEl)
+    })
+}
 
 
+form.addEventListener('submit', (e) => {
+    e.preventDefault()
 
+    const searchTerm = search.value
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// async function getInfo(url) {
-//     const res = await fetch(url)
-//     const data = await res.json()
-//     showInfo(data.results)
-
-// }
-
-
-// function showInfo(data) {
-//     main.innerHTML = ''
-//     data.forEach((info) => {
-//         const { title, first, last, age, picture, large } = info
-
-//         const dataEl = document.createElement('div')
-//         dataEl.classList.add('movie')
-
-//         dataEl.innerHTML = `
-//         <img src= "${picture} " alt=" ${title}">
-//         <div class="movie-info">
-//         <h3>${title}</h3>
-//         </div>
-//         <div class="oveview">
-//         <h3>Overview</h3>
-//         ${picture, large}
-//         </div>
-//     `
-//         main.appendChild(dataEl)
-//     })
-// }
-
-
-// form.addEventListener('submit', (e) => {
-//     e.preventDefault()
-
-//     const searchTerm = search.value
-
-//     if (searchTerm && searchTerm !== ' ') {
-//         getInfo(API_URL + searchTerm)
-//         search.value = ' '
-//     }
-//     else {
-//         window.location.reload()
-//     }
-// })
+    if (searchTerm && searchTerm !== ' ') {
+        getInfo(API_URL + searchTerm)
+        search.value = ' '
+    }
+    else {
+        window.location.reload()
+    }
+})
